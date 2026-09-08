@@ -10,7 +10,7 @@ A Server Component page that:
 
 1. Connects to one Pulse oracle contract.
 2. Asks the contract which assets it quotes.
-3. Fetches `lastPrice` for XLM, USDC, PYUSD, and SolvBTC when they exist on that oracle.
+3. Fetches `lastPrice` for XLM, AQUA, PYUSD, and SolvBTC when they exist on that oracle.
 4. Formats integer oracle prices using the contract `decimals()` value.
 5. Shows raw Pulse metadata so you can see how the data is actually stored.
 
@@ -107,7 +107,7 @@ Default `REFLECTOR_PULSE_CONTRACT_ID` in `.env.example` is **Stellar Pubnet Puls
 
 `CALI2BYU2JE6WVRUFYTS6MSBNEHGJ35P4AVCZYF3B6QOE3QKOB2PLE6M`
 
-That oracle quotes Stellar-issued assets (typically in USDC). The featured set is Stellar-native, so this is the instance most likely to list them.
+That oracle quotes Stellar-issued assets (typically in USDC). XLM, AQUA, PYUSD, and SolvBTC are chosen because they are listed there.
 
 Other public Pulse contracts ([Reflector Pulse](https://reflector.network/pulse), [Stellar oracle providers](https://developers.stellar.org/docs/data/oracles/oracle-providers)):
 
@@ -117,9 +117,9 @@ Other public Pulse contracts ([Reflector Pulse](https://reflector.network/pulse)
 | Stellar Pubnet | `CALI2BYU2JE6WVRUFYTS6MSBNEHGJ35P4AVCZYF3B6QOE3QKOB2PLE6M` | `Stellar` SAC addresses, quoted in USDC |
 | Fiat FX | `CBKGPWGKSKZF52CFHMTRR23TBWTPMRDIYZ4O2P5VS65BMHYH4DXMCJZC` | Fiat symbols |
 
-If you point this app at the CEX oracle, XLM may still resolve as `Other("XLM")`, but PYUSD / SolvBTC will often show **Feed unavailable on this oracle**. That is intentional: the UI never assumes a feed exists.
+If you point this app at the CEX oracle, tickers such as `BTC` and often `XLM` resolve as `Other` symbols, while AQUA / PYUSD / SolvBTC will often show **Feed unavailable on this oracle**. That is intentional: the UI never assumes a feed exists.
 
-**Pubnet Pulse quotes in USDC.** Circle USDC is `base()`, not a row in `assets()`. The USDC card explains that instead of inventing a USDC/USDC price.
+**Pubnet Pulse quotes in USDC.** Circle USDC is `base()`, not a row in `assets()`. It is not a featured card. If a featured symbol ever matches `base()`, the card explains that instead of inventing a 1.00 price.
 
 ## Connecting to Reflector Pulse
 
@@ -290,6 +290,8 @@ Not in this version, but the module split leaves room for:
 - JS client: [github.com/reflector-network/contract-client-js](https://github.com/reflector-network/contract-client-js)
 - Pulse deployments: [reflector.network/pulse](https://reflector.network/pulse)
 - Protocol docs: [reflector.network/docs](https://reflector.network/docs)
+- X: [x.com/in_reflector](https://x.com/in_reflector)
+- Discord: [discord.gg/axzHwqUtG](https://discord.gg/axzHwqUtG)
 - Stellar oracle list: [developers.stellar.org/docs/data/oracles/oracle-providers](https://developers.stellar.org/docs/data/oracles/oracle-providers)
 
 ## License

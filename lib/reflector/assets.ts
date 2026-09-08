@@ -2,13 +2,13 @@ import type { Asset } from "@reflector/contract-client";
 import { Asset as StellarAsset, Networks } from "@stellar/stellar-sdk";
 import type { FeaturedSymbol } from "./types";
 
-export const FEATURED_ASSETS = ["XLM", "USDC", "PYUSD", "SolvBTC"] as const;
+export const FEATURED_ASSETS = ["XLM", "AQUA", "PYUSD", "SolvBTC"] as const;
 
 type FeaturedMatchers = {
   symbol: FeaturedSymbol;
   /**
    * `Other` tickers used by CEX/DEX Pulse oracles.
-   * Passing `"XLM"` to lastPrice() only works when the oracle lists this tag.
+   * A shorthand string only works when the oracle stores this tag.
    */
   otherTickers: string[];
   /**
@@ -21,41 +21,56 @@ type FeaturedMatchers = {
 const PUBNET = Networks.PUBLIC;
 
 const USDC_ISSUER = "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN";
+const AQUA_ISSUER = "GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA";
 const PYUSD_ISSUER = "GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5";
 
+const XLM_SAC = StellarAsset.native().contractId(PUBNET);
+const USDC_SAC = new StellarAsset("USDC", USDC_ISSUER).contractId(PUBNET);
+const AQUA_SAC = new StellarAsset("AQUA", AQUA_ISSUER).contractId(PUBNET);
+const PYUSD_SAC = new StellarAsset("PYUSD", PYUSD_ISSUER).contractId(PUBNET);
+const SOLVBTC_CONTRACT = "CBIJBDNZNF4X35BJ4FFZWCDBSCKOP5NB4PLG4SNENRMLAPYG4P5FM6VN";
+
 /**
- * Known identities for the four featured symbols.
+ * Labels for known C-addresses, including Circle USDC which is Pubnet Pulse
+ * `base()` and is not a featured feed.
+ */
+const KNOWN_STELLAR_LABELS: Record<string, string> = {
+  [XLM_SAC]: "XLM",
+  [USDC_SAC]: "USDC",
+  [AQUA_SAC]: "AQUA",
+  [PYUSD_SAC]: "PYUSD",
+  [SOLVBTC_CONTRACT]: "SolvBTC",
+};
+
+/**
+ * Featured identities for the default Pubnet Pulse oracle.
  *
- * Classic assets (XLM, Circle USDC, Paxos PYUSD) have a deterministic SAC
- * via `Asset.contractId(passphrase)`. SolvBTC on Stellar is a contract token
- * (`C…`), not a classic code+issuer pair, so its address is listed directly.
+ * XLM, AQUA, and PYUSD are classic assets with a deterministic SAC.
+ * SolvBTC is a contract token (`C…`), not a classic code+issuer pair.
  */
 export const FEATURED_ASSET_REGISTRY: FeaturedMatchers[] = [
   {
     symbol: "XLM",
     otherTickers: ["XLM"],
-    stellarContracts: [StellarAsset.native().contractId(PUBNET)],
+    stellarContracts: [XLM_SAC],
   },
   {
-    symbol: "USDC",
-    otherTickers: ["USDC"],
-    stellarContracts: [new StellarAsset("USDC", USDC_ISSUER).contractId(PUBNET)],
+    symbol: "AQUA",
+    otherTickers: ["AQUA"],
+    stellarContracts: [AQUA_SAC],
   },
   {
     symbol: "PYUSD",
     otherTickers: ["PYUSD"],
     stellarContracts: [
-      new StellarAsset("PYUSD", PYUSD_ISSUER).contractId(PUBNET),
-      // Some listings use the token contract rather than the derived SAC.
+      PYUSD_SAC,
       "CAKBVGHJIK2HPP5JPT2UOP27O2IMKIUUCFGP3LOOMGCZLE3NP73Z44H6",
     ],
   },
   {
     symbol: "SolvBTC",
     otherTickers: ["SolvBTC"],
-    stellarContracts: [
-      "CBIJBDNZNF4X35BJ4FFZWCDBSCKOP5NB4PLG4SNENRMLAPYG4P5FM6VN",
-    ],
+    stellarContracts: [SOLVBTC_CONTRACT],
   },
 ];
 
@@ -83,12 +98,9 @@ export function assetLabel(asset: Asset): string {
     return asset.values[0];
   }
 
-  const featured = FEATURED_ASSET_REGISTRY.find((item) =>
-    item.stellarContracts.includes(asset.values[0]),
-  );
-
-  if (featured) {
-    return featured.symbol;
+  const known = KNOWN_STELLAR_LABELS[asset.values[0]];
+  if (known) {
+    return known;
   }
 
   const id = asset.values[0];

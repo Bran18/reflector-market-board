@@ -32,6 +32,22 @@ export function Header() {
           >
             Docs
           </a>
+          <a
+            className="hover:text-zinc-900 dark:hover:text-zinc-100"
+            href="https://x.com/in_reflector"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            X
+          </a>
+          <a
+            className="hover:text-zinc-900 dark:hover:text-zinc-100"
+            href="https://discord.gg/axzHwqUtG"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Discord
+          </a>
         </nav>
       </div>
     </header>

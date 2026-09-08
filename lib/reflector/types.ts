@@ -1,6 +1,6 @@
 import type { Asset } from "@reflector/contract-client";
 
-export type FeaturedSymbol = "XLM" | "USDC" | "PYUSD" | "SolvBTC";
+export type FeaturedSymbol = "XLM" | "AQUA" | "PYUSD" | "SolvBTC";
 
 /**
  * Raw Pulse quote before any UI formatting.
