@@ -6,7 +6,11 @@
  * The formatted string is for humans (up to 8 fraction digits). The card's
  * developer details still show the full integer.
  */
-export function formatOraclePrice(value: bigint, decimals: number): string {
+export function formatOraclePrice(
+  value: bigint,
+  decimals: number,
+  fullPrecision = false,
+): string {
   if (decimals < 0) {
     throw new Error("Oracle decimals must be non-negative");
   }
@@ -18,7 +22,11 @@ export function formatOraclePrice(value: bigint, decimals: number): string {
   const fraction = abs % scale;
 
   const wholePart = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const fractionPart = trimFraction(fraction.toString().padStart(decimals, "0"));
+  const digits =
+    decimals === 0 ? "" : fraction.toString().padStart(decimals, "0");
+  const fractionPart = fullPrecision
+    ? digits.replace(/0+$/, "")
+    : trimFraction(digits);
   const sign = negative ? "-" : "";
 
   if (!fractionPart) {

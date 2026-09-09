@@ -1,3 +1,4 @@
+import { formatResolution } from "@/lib/reflector/format-time";
 import type { MarketAsset } from "@/lib/reflector/types";
 import { OracleDetails } from "./oracle-details";
 
@@ -33,6 +34,9 @@ export function MarketCard({
             {data.displayPrice}
           </p>
           <p className="mt-3 text-sm text-zinc-500">{data.updatedLabel}</p>
+          <p className="mt-1 text-xs text-zinc-500">
+            Feed resolution: {formatResolution(data.resolution)}
+          </p>
           <div className="mt-auto pt-6">
             <OracleDetails data={data} />
           </div>
@@ -60,7 +64,7 @@ export function MarketCard({
             feed — the record is missing or stale.
           </p>
           <p className="mt-3 text-xs text-zinc-400">
-            Resolution {data.resolution} seconds
+            Feed resolution: {formatResolution(data.resolution)}
           </p>
         </>
       ) : null}

@@ -1,5 +1,8 @@
 /** Pulse public timestamps are unix seconds, not milliseconds. */
-export function formatUpdatedAt(timestampSeconds: bigint, nowMs = Date.now()): string {
+export function formatUpdatedAt(
+  timestampSeconds: bigint,
+  nowMs = Date.now(),
+): string {
   const timestampMs = Number(timestampSeconds) * 1000;
   if (!Number.isFinite(timestampMs) || timestampMs <= 0) {
     return "Update time unknown";
@@ -8,20 +11,20 @@ export function formatUpdatedAt(timestampSeconds: bigint, nowMs = Date.now()): s
   const deltaSeconds = Math.max(0, Math.floor((nowMs - timestampMs) / 1000));
 
   if (deltaSeconds < 5) {
-    return "Updated just now";
+    return "Last update: just now";
   }
 
   if (deltaSeconds < 60) {
-    return `Updated ${deltaSeconds} seconds ago`;
+    return `Last update: ${deltaSeconds} sec ago`;
   }
 
   const minutes = Math.floor(deltaSeconds / 60);
   if (minutes < 60) {
-    return `Updated ${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+    return `Last update: ${minutes} min ago`;
   }
 
   const hours = Math.floor(minutes / 60);
-  return `Updated ${hours} hour${hours === 1 ? "" : "s"} ago`;
+  return `Last update: ${hours} hr ago`;
 }
 
 export function networkLabel(networkPassphrase: string): string {
@@ -34,4 +37,10 @@ export function networkLabel(networkPassphrase: string): string {
   }
 
   return networkPassphrase;
+}
+
+/** Keep non-whole minutes exact rather than rounding the feed interval. */
+export function formatResolution(seconds: number): string {
+  if (seconds >= 60 && seconds % 60 === 0) return `${seconds / 60} min`;
+  return `${seconds} sec`;
 }

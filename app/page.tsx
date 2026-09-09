@@ -1,3 +1,5 @@
+import { Walkthrough } from "@/components/walkthrough";
+import { formatResolution } from "@/lib/reflector/format-time";
 import { Header } from "@/components/header";
 import { MarketGrid } from "@/components/market-grid";
 import { OracleError } from "@/components/oracle-error";
@@ -7,7 +9,6 @@ import { getOracleSnapshot } from "@/lib/reflector/queries";
 import type { OracleSnapshot } from "@/lib/reflector/types";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60;
 
 export default async function Home() {
   let snapshot: OracleSnapshot | undefined;
@@ -21,7 +22,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-10 px-6 py-12 sm:px-8 sm:py-16">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-10 px-6 py-12 sm:px-8 sm:py-16">
       <Header />
       {snapshot ? (
         <>
@@ -30,13 +31,14 @@ export default async function Home() {
             {" · "}
             {snapshot.decimals} decimals
             {" · "}
-            {snapshot.resolution}s resolution
+            Feed resolution: {formatResolution(snapshot.resolution)}
           </p>
           <MarketGrid snapshot={snapshot} />
         </>
       ) : (
         <OracleError message={publicErrorMessage(loadError)} />
       )}
-    </div>
+      <Walkthrough contractId={snapshot?.contractId} />
+    </main>
   );
 }

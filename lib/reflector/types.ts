@@ -1,6 +1,7 @@
 import type { Asset } from "@reflector/contract-client";
 
-export type FeaturedSymbol = "XLM" | "AQUA" | "PYUSD" | "SolvBTC";
+export type FeaturedSymbol =
+  (typeof import("./assets").FEATURED_ASSETS)[number];
 
 /**
  * Raw Pulse quote before any UI formatting.
