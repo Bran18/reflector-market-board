@@ -1,5 +1,5 @@
 import { MarketCardSkeleton } from "@/components/market-card";
-import { FEATURED_ASSETS } from "@/lib/reflector/assets";
+import { DEFAULT_FEEDS } from "@/lib/reflector/display-feeds";
 
 export default function Loading() {
   return (
@@ -9,7 +9,7 @@ export default function Loading() {
         <div className="h-8 w-64 animate-pulse bg-zinc-200 dark:bg-zinc-800" />
       </div>
       <section className="grid gap-4 sm:grid-cols-2">
-        {FEATURED_ASSETS.map((asset) => (
+        {DEFAULT_FEEDS.map((asset) => (
           <MarketCardSkeleton key={asset} asset={asset} />
         ))}
       </section>

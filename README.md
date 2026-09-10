@@ -16,7 +16,10 @@ A Server Component page that:
 
 [View the live board](https://reflector-market-board.vercel.app/) · [Read Reflector docs](https://reflector.network/docs)
 
-The main board includes a dropdown for the configured featured feeds. It filters
+The main board shows PYUSD, XLM, SolvBTC, and USDGLO by default, in that order.
+**Show more** reveals the remaining feeds; **Show less** returns to those four.
+The dropdown retains every configured featured feed and can show any individual
+asset directly, including feeds hidden in the default view. It filters
 server-rendered cards locally; changing the selection does not fetch new prices.
 Reload for fresh data. The **Build with Reflector** section groups the expandable
 walkthrough and asset exercise. X and Discord links stay in

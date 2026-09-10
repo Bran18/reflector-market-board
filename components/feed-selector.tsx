@@ -1,13 +1,24 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import type { FeaturedSymbol } from "@/lib/reflector/types";
+
+import { DEFAULT_FEEDS } from "@/lib/reflector/display-feeds";
 
 export function FeedSelector({
   feeds,
 }: {
-  feeds: { symbol: string; card: ReactNode }[];
+  feeds: { symbol: FeaturedSymbol; card: ReactNode }[];
 }) {
   const [selected, setSelected] = useState("all");
+  const [showMore, setShowMore] = useState(false);
+  const defaultFeeds = DEFAULT_FEEDS.flatMap((symbol) =>
+    feeds.filter((feed) => feed.symbol === symbol),
+  );
+  const remainingFeeds = feeds.filter(
+    (feed) => !DEFAULT_FEEDS.includes(feed.symbol),
+  );
+  const orderedFeeds = [...defaultFeeds, ...remainingFeeds];
 
   return (
     <div className="space-y-5">
@@ -39,16 +50,31 @@ export function FeedSelector({
           </select>
         </div>
       </div>
+      {selected === "all" && remainingFeeds.length > 0 ? (
+        <button
+          type="button"
+          aria-expanded={showMore}
+          aria-controls="feed-cards"
+          onClick={() => setShowMore((expanded) => !expanded)}
+          className="border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
+        >
+          {showMore ? "Show less" : `Show more (${remainingFeeds.length})`}
+        </button>
+      ) : null}
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {selected === "all"
-          ? "Showing all featured feeds"
+          ? `Showing ${showMore ? feeds.length : defaultFeeds.length} featured feeds`
           : `Showing ${selected} feed`}
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {feeds.map(({ symbol, card }) => (
+      <div id="feed-cards" className="grid gap-4 sm:grid-cols-2">
+        {orderedFeeds.map(({ symbol, card }) => (
           <div
             key={symbol}
-            hidden={selected !== "all" && selected !== symbol}
+            hidden={
+              selected === "all"
+                ? !showMore && !DEFAULT_FEEDS.includes(symbol)
+                : selected !== symbol
+            }
             className="min-w-0"
           >
             {card}
