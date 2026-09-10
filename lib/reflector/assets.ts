@@ -2,7 +2,20 @@ import type { Asset } from "@reflector/contract-client";
 import { Asset as StellarAsset, Networks } from "@stellar/stellar-sdk";
 import type { FeaturedSymbol } from "./types";
 
-export const FEATURED_ASSETS = ["XLM", "AQUA", "PYUSD", "SolvBTC"] as const;
+export const FEATURED_ASSETS = [
+  "XLM",
+  "AQUA",
+  "PYUSD",
+  "SolvBTC",
+  "BTCLN",
+  "yUSDC",
+  "SSLX",
+  "ARST",
+  "EURC",
+  "XRP",
+  "XRF",
+  "USDGLO",
+] as const;
 
 type FeaturedMatchers = {
   symbol: FeaturedSymbol;
@@ -28,7 +41,8 @@ const XLM_SAC = StellarAsset.native().contractId(PUBNET);
 const USDC_SAC = new StellarAsset("USDC", USDC_ISSUER).contractId(PUBNET);
 const AQUA_SAC = new StellarAsset("AQUA", AQUA_ISSUER).contractId(PUBNET);
 const PYUSD_SAC = new StellarAsset("PYUSD", PYUSD_ISSUER).contractId(PUBNET);
-const SOLVBTC_CONTRACT = "CBIJBDNZNF4X35BJ4FFZWCDBSCKOP5NB4PLG4SNENRMLAPYG4P5FM6VN";
+const SOLVBTC_CONTRACT =
+  "CBIJBDNZNF4X35BJ4FFZWCDBSCKOP5NB4PLG4SNENRMLAPYG4P5FM6VN";
 
 /**
  * Labels for known C-addresses, including Circle USDC which is Pubnet Pulse
@@ -72,13 +86,71 @@ export const FEATURED_ASSET_REGISTRY: FeaturedMatchers[] = [
     otherTickers: ["SolvBTC"],
     stellarContracts: [SOLVBTC_CONTRACT],
   },
+  {
+    symbol: "BTCLN",
+    otherTickers: ["BTCLN"],
+    stellarContracts: [
+      "CBHIQPUXLFLC5O44ZJVUTCL5LMZFLVGU5DEIGSYKBSAPFMOGTKOQEPFM",
+    ],
+  },
+  {
+    symbol: "yUSDC",
+    otherTickers: ["yUSDC"],
+    stellarContracts: [
+      "CDOFW7HNKLUZRLFZST4EW7V3AV4JI5IHMT6BPXXSY2IEFZ4NE5TWU2P4",
+    ],
+  },
+  {
+    symbol: "SSLX",
+    otherTickers: ["SSLX"],
+    stellarContracts: [
+      "CBHBD77PWZ3AXPQVYVDBHDKEMVNOR26UZUZHWCB6QC7J5SETQPRUQAS4",
+    ],
+  },
+  {
+    symbol: "ARST",
+    otherTickers: ["ARST"],
+    stellarContracts: [
+      "CCRPYMVKZLWGZHEDZ23FOE22E3T3HOCNP5Y2EFZFVRUVIXU5NJ7UNGV2",
+    ],
+  },
+  {
+    symbol: "EURC",
+    otherTickers: ["EURC"],
+    stellarContracts: [
+      "CBVDRT5474OBUEXF5MJB3UGQ5CG7CKGCAH5M4RV5NBCDJUBZ5OXHJLOU",
+    ],
+  },
+  {
+    symbol: "XRP",
+    otherTickers: ["XRP"],
+    stellarContracts: [
+      "CAAV3AE3VKD2P4TY7LWTQMMJHIJ4WOCZ5ANCIJPC3NRSERKVXNHBU2W7",
+    ],
+  },
+  {
+    symbol: "XRF",
+    otherTickers: ["XRF"],
+    stellarContracts: [
+      "CBLLEW7HD2RWATVSMLAGWM4G3WCHSHDJ25ALP4DI6LULV5TU35N2CIZA",
+    ],
+  },
+  {
+    symbol: "USDGLO",
+    otherTickers: ["USDGLO"],
+    stellarContracts: [
+      "CB226ZOEYXTBPD3QEGABTJYSKZVBP2PASEISLG3SBMTN5CE4QZUVZ3CE",
+    ],
+  },
 ];
 
 export function findOracleAsset(
   featured: FeaturedSymbol,
   oracleAssets: Asset[],
 ): Asset | undefined {
-  const matchers = FEATURED_ASSET_REGISTRY.find((item) => item.symbol === featured);
+  const matchers = FEATURED_ASSET_REGISTRY.find(
+    (item) => item.symbol === featured,
+  );
   if (!matchers) {
     return undefined;
   }
@@ -98,7 +170,11 @@ export function assetLabel(asset: Asset): string {
     return asset.values[0];
   }
 
-  const known = KNOWN_STELLAR_LABELS[asset.values[0]];
+  const known =
+    KNOWN_STELLAR_LABELS[asset.values[0]] ??
+    FEATURED_ASSET_REGISTRY.find((entry) =>
+      entry.stellarContracts.includes(asset.values[0]),
+    )?.symbol;
   if (known) {
     return known;
   }

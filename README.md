@@ -10,7 +10,7 @@ A Server Component page that:
 
 1. Connects to one Pulse oracle contract.
 2. Asks the contract which assets it quotes.
-3. Fetches `lastPrice` for XLM, AQUA, PYUSD, and SolvBTC when they exist on that oracle.
+3. Fetches `lastPrice` for the configured featured assets when they exist on that oracle.
 4. Formats integer oracle prices using the contract `decimals()` value.
 5. Shows raw Pulse metadata so you can see how the data is actually stored.
 
@@ -19,7 +19,7 @@ A Server Component page that:
 The main board includes a dropdown for the configured featured feeds. It filters
 server-rendered cards locally; changing the selection does not fetch new prices.
 Reload for fresh data. The **Build with Reflector** section groups the expandable
-walkthrough, wallet explanation, and asset exercise. X and Discord links stay in
+walkthrough and asset exercise. X and Discord links stay in
 the header for community support.
 
 ## What you will learn
@@ -121,7 +121,7 @@ Default `REFLECTOR_PULSE_CONTRACT_ID` in `.env.example` is **Stellar Pubnet Puls
 
 `CALI2BYU2JE6WVRUFYTS6MSBNEHGJ35P4AVCZYF3B6QOE3QKOB2PLE6M`
 
-That oracle quotes Stellar-issued assets (typically in USDC). XLM, AQUA, PYUSD, and SolvBTC are chosen because they are listed there.
+That oracle quotes Stellar-issued assets (typically in USDC). The featured list includes XLM, AQUA, PYUSD, SolvBTC, BTCLN, yUSDC, SSLX, ARST, EURC, XRP, XRF, and USDGLO. Each is matched by its Stellar contract address, since tickers can be shared by different issuers.
 
 Other public Pulse contracts ([Reflector Pulse](https://reflector.network/pulse), [Stellar oracle providers](https://developers.stellar.org/docs/data/oracles/oracle-providers)):
 
@@ -299,13 +299,6 @@ lib/reflector/
 
 Presentation components do not import `PulseClient`. They receive a `MarketAsset` view model.
 
-## Why no wallet is needed
-
-`PulseClient` builds simulated Soroban invocations for these public reads.
-A public G-address supplies the source account for the simulation envelope;
-no secret key, signature, wallet connection, or transaction submission is involved.
-The server does the read and sends rendered output to the browser.
-
 ## Your turn: add another asset
 
 1. Inspect `await getPulseClient().assets()` on the server to select a feed on
@@ -315,7 +308,20 @@ The server does the read and sends rendered output to the browser.
    symbol to the existing list:
 
    ```ts
-   export const FEATURED_ASSETS = ["XLM", "AQUA", "PYUSD", "SolvBTC"] as const;
+   export const FEATURED_ASSETS = [
+     "XLM",
+     "AQUA",
+     "PYUSD",
+     "SolvBTC",
+     "BTCLN",
+     "yUSDC",
+     "SSLX",
+     "ARST",
+     "EURC",
+     "XRP",
+     "XRF",
+     "USDGLO",
+   ] as const;
    ```
 
 3. Add an entry to `FEATURED_ASSET_REGISTRY` in that same file with `symbol`,

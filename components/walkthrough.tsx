@@ -40,7 +40,7 @@ export function Walkthrough({ contractId }: { contractId?: string }) {
       </p>
       <details className="mt-6">
         <summary className="cursor-pointer font-medium text-zinc-900 dark:text-zinc-100">
-          How it works, why no wallet, and your first integration
+          How it works and your first integration
         </summary>
         <div className="mt-6 space-y-10">
           <section
@@ -137,23 +137,6 @@ export function Walkthrough({ contractId }: { contractId?: string }) {
               contract ID. Feed resolution is the oracle’s interval, not the age
               of an individual price. Ages are calculated when the server
               renders; reload to fetch again.
-            </p>
-          </section>
-
-          <section aria-labelledby="no-wallet" className="space-y-3">
-            <h3
-              id="no-wallet"
-              className="text-xl font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Why no wallet?
-            </h3>
-            <p>
-              These public Pulse reads simulate contract calls through Soroban
-              RPC. They do not sign or submit transactions. The SDK needs a
-              public G-address to build the simulation envelope, but no secret
-              key, Freighter connection, or signing callback is needed. Next.js
-              performs the reads on the server and renders the results for your
-              browser.
             </p>
           </section>
 
