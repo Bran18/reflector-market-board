@@ -3,16 +3,25 @@ import "server-only";
 import { FEATURED_ASSETS, getMarketAsset } from "@/lib/reflector/queries";
 import type { OracleSnapshot } from "@/lib/reflector/types";
 import { MarketCard, MarketCardSkeleton } from "./market-card";
+import { FeedSelector } from "./feed-selector";
 import { Suspense } from "react";
 
 export function MarketGrid({ snapshot }: { snapshot: OracleSnapshot }) {
   return (
-    <section className="grid gap-4 sm:grid-cols-2">
-      {FEATURED_ASSETS.map((asset) => (
-        <Suspense key={asset} fallback={<MarketCardSkeleton asset={asset} />}>
-          <MarketCardSlot asset={asset} snapshot={snapshot} />
-        </Suspense>
-      ))}
+    <section aria-labelledby="market-board">
+      <FeedSelector
+        feeds={FEATURED_ASSETS.map((asset) => ({
+          symbol: asset,
+          card: (
+            <Suspense
+              key={asset}
+              fallback={<MarketCardSkeleton asset={asset} />}
+            >
+              <MarketCardSlot asset={asset} snapshot={snapshot} />
+            </Suspense>
+          ),
+        }))}
+      />
     </section>
   );
 }

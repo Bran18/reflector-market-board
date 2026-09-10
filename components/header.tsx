@@ -30,6 +30,30 @@ export function Header() {
         >
           Read Reflector docs ↗
         </a>
+        <a className="px-4 py-3 underline underline-offset-4" href="#learn">
+          How it works ↓
+        </a>
+      </nav>
+      <nav
+        aria-label="Reflector community"
+        className="flex flex-wrap gap-5 text-sm text-zinc-600 dark:text-zinc-400"
+      >
+        <a
+          className="hover:text-zinc-950 dark:hover:text-white"
+          href={LINKS.x}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Follow on X ↗
+        </a>
+        <a
+          className="hover:text-zinc-950 dark:hover:text-white"
+          href={LINKS.discord}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Join Discord ↗
+        </a>
       </nav>
     </header>
   );

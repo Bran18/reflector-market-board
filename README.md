@@ -16,6 +16,12 @@ A Server Component page that:
 
 [View the live board](https://reflector-market-board.vercel.app/) · [Read Reflector docs](https://reflector.network/docs)
 
+The main board includes a dropdown for the configured featured feeds. It filters
+server-rendered cards locally; changing the selection does not fetch new prices.
+Reload for fresh data. The **Build with Reflector** section groups the expandable
+walkthrough, wallet explanation, and asset exercise. X and Discord links stay in
+the header for community support.
+
 ## What you will learn
 
 - How to install `@reflector/contract-client` and its `@stellar/stellar-sdk` peer.
